@@ -72,6 +72,21 @@ class CompletionSuite extends BaseCompletionSuite {
   )
 
   check(
+    "tupleAlias",
+    """
+      |trait Foo {
+      |  def setup: List[Foo.Result]
+      |}
+      |object Foo {
+      |  type Result = (String, String)
+      |  val foo: Foo = ???
+      |  foo.setup.exist@@
+      |}""".stripMargin,
+    """|exists(p: Result => Boolean): Boolean
+       |""".stripMargin
+  )
+
+  check(
     "tparam1",
     """
       |class Foo[A] {
